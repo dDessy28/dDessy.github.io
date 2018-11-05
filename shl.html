@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"content="width=device-width, initial-scale=1.0">
+    <title>SHL challenges</title>
+<style>
+body {
+   background-color:white;
+}
+h1 {
+   color:blue;
+}
+img {
+   align:middle;
+   width:60%;
+   height:60%;
+}
+p.tengah {
+   text-align:center;
+}
+p.biru {
+   color:blue;
+}
+p.merah {
+   color:red;
+}
+p.kuning {
+   color:yellow;
+}
+.cnt {
+   text-align:center;
+}
+.brd {
+   border: 1px solid;
+   padding: 30px;
+}
+</style>
+</head>
+<body>
+    <div>
+      <h1 class="cnt">SHL Challenge <br>"Android App Reverse"</h1>
+      <br>
+      <p class="brd" style="text-align:center">Dibuat Tanggal : 30 oktober 2018 <br><br> Oleh : dessy :)</p>
+      <br>
+      <h2>Pendahuluan</h2>
+      <h3>Assalamualaikum wr wb</h3>
+      <b><p style="color:red">Penting!!! : disini saya hanya membagikan sedikit informasi pengetahuan dan pengalaman saat menyelesaikan challenge SHL(Android Reverse). jadi, dengan ini anda setuju bahwa yang kita pelajari bersama ini tidak digunakan untuk kejahatan atau berbagai bentuk hal yang merugikan orang lain. dengan kata lain kita belajar untuk/bagi kebaikan bersama.</p></b>
+      <p>challenge : asuna.apk</p>
+      <br>
+      <h2>Langsung saja kita pelajari bersama</h2>
+      <p>Didalam challenge tersebut kita akan di suguhkan dengan sebuah aplikasi android yang didalamnya terdapat String flag yang tersembunyi.</p>
+      <p>okey, langsung kita install dan buka aplikasinya.</p>
+      <p class="tengah"><img src="shl/asuna/img/asuna.png" align="middle"></img></p>
+      <p>nah, aplikasinya hanya mempunyai tampilan seperti ini dan tidak ada menu lain. jadi, diceritakan pada aplikasi ini terdapat karakter utama yaitu Asuna yang sedang kehilangan ingatan. tugas kita di sini adalah mencari dimana flagnya?</p>
+      <p>okey, seperti biasa. kita decompile apknya untuk melihat source codenya. ada banyak tools decompiler, kita bisa menggunakan JaDX untuk windows atau Show Java untuk android.</p>
+      <p class="tengah"><img src="shl/asuna/img/main.png" align="middle" style="width:90%;height:90%;"></img></p>
+      <p>nah, source javanya sudah kita ketahui. jadi sebenarnya flagnya sudah di generate ke bentuk Log android.</p>
+      <p>hmm, kita coba lihat di Log aplikasi ini dengan pencarian string "Your Flag is" :)</p>
+      <p>disini saya menggunakan Logcat Extreme. untuk melihat log android. dan saya menggunakan fitur search tersebut agar lebih spesifik.</p>
+      <p class="tengah"><img src="shl/asuna/img/logcat.png" align="middle"></img></p>
+      <p>nah, kita melihat aplikasi tersebut menggenerate flagnya. tapi kok flagnya aneh :)</p>
+      <p>mari kita mencari darimana flag tersebut di generate.</p>
+      <p>jika kita melihat pada source MainActivity, dapat kita ketahui bahwa flag tersebut didapat dari class "challenges" pada method "anu()". okey kita lihat soure pada class challenges :)</p>
+      <p class="tengah"><img src="shl/asuna/img/challenges.png" align="middle" style="width:90%;height:90%;"></img></p>
+      <p>hmm, seperti yang kita lihat. hasil generate Stringnya dirubah ke Base64 encode.</p>
+      <p>langsung kita coba decode hasil string dari Logcat tadi :)</p>
+      <p>berikut adalah hasil decode dari tools Base64 decode online.</p>
+      <p class="tengah"><img src="shl/asuna/img/base64.png" align="middle"></img></p>
+      <p>okey, seperti inikah flag yang di maksud secara keseluruhan? ternyata tidak :) kata masnya string *REDACTED* harus di ganti dengan flag tersembunyi.</p>
+      <p>mari, kita coba lihat lagi semua source java di aplikasi ini.</p>
+      <p class="tengah"><img src="shl/asuna/img/scrflag.png" align="middle" style="width:90%;height:90%;"></img></p>
+      <p>maaf, kepotong. karna gak ada fitur word wrapnya :v</p>
+      <p>nah, kita temukan class secret_flag yang berisi seperti diatas.</p>
+      <p>seperti yang kita tau class tersebut berisi char array. apakah ini flagnya? :)</p>
+      <p>sebenarnya kita dapat menggenerate sendiri dengan menggabungkan char array tersebut dari arrays 0 - baris terakhir.</p>
+      <p>jadi, secara keseluruhan flagnya setelah String *REDACTED* di replace dengan flag asli adalah.</p>
+      <p class="biru" style="border:2px solid red;overflow-y:hidden;overflow-x:scroll;">SHL{simple_1LCH4IJNSQV__asuna_&lt;3_me__REVERSE}</p>
+      <p>mungkin misi dari challenge ini sampai disini ya teman2 :) <a style="color:powderblue;">//maaf jika saya salah.</a></p>
+      <p>saya mohon maaf, jika dalam menyampaikan dan menjelaskan banyak salah. karna memang saya belum menguasain betul secara keseluruhannya :)</p>
+      <br></br>
+      <p>Apabila belum capek membacanya. mari kita pelajari cara lain :)</p>
+      <p class="biru">lanjut mas/mbak?</p>
+      <p>okey, misi dalam challenge ini kan sebenernya mencari suatu String flag yang tersembunyi. nah, kebetulan flag tersebut sudah ada dalam source apk ini sendiri dan kata masnya juga flagnya di generate pada client side. jadi, tidak mengambil suatu String lain dari server online.</p>
+      <p>langsung saja, cara lain yang sudah saya terapkan yaitu mengInject suatu class baru untuk menggenerate flag secara keseluruhan dari source apk ini juga.</p>
+      <p>berikut android java code yang dapat kita gunakan.</p>
+      <p class="tengah"><img src="shl/asuna/img/full.png" align="middle"></img></p>
+      <p>oh iya. karna Asuna sudah di pack ke dalam bentuk Apk, maka untuk mengInjectnya bisa dengan code smali(java dalvik). untuk membuatnya kita buat juga aplikasi serupa dengan Aplikasi AndroidNIDE untuk build apk dari source tersebut.</p>
+      <p>pada source ini "str_pertama", "str_kedua", "str_ketiga", "secret_flag" dan "challenges" hanyalah beberapa code palsu(fake code).</p>
+      <p>karena yang akan kita coba sekarang adalah mengInject code ke Apk Asuna untuk mendapatkan flag yang akan di tampilkan ke dalam Alert Dialog. maka kita gunakan "Alert.java" & "Inject.java" atau "Alert.java" & "LoadMe.java"</p>
+      <p>File Alert.java</p>
+      <iframe class="tengah" style="height:800px;width:95%;" src="shl/asuna/java/Alert.java"></iframe>
+      <br></br>
+      <p>File Inject.java</p>
+      <iframe class="tengah" style="height:800px;width:95%;" src="shl/asuna/java/Inject.java"></iframe>
+      <br></br>
+      <p>File LoadMe.java</p>
+      <iframe class="tengah" style="height:800px;width:95%;" src="shl/asuna/java/LoadMe.java"></iframe>
+      <p>jadi, dari source ini di build apk. lalu kita bongkar apk tersebut untuk mendapat file smali(java dalvik). untuk penguna android kita dapat menggunakan Apk Editor.</p>
+      <p>untuk full sourcenya bisa Teman2 lihat <a>disini</a></p>
+      <p>okey, sampai sini kita sudah membuat dan mempunyai file smali yang akan di Inject ke apk Asuna.</p>
+      <p>untuk mengInjectnya kita gunakan juga Apk Editor :)</p>
+      <p>nah, untuk menjalankan class yang sudah kita buat dan injectkan tadi kita perlu memanggilnya dari MainActivity aplikasi Asuna.</p>
+      <p>kita hanya perlu memanggil class dengan membawa parameter Context :)</p>
+      <p>jadi codenya bisa seperti ini :</p>
+      <p class="biru">invoke-static {p0}, Lorg/chall_reverse_android/Inject;->SHL(Landroid/content/Context;)V <a style="color:red;">//Inject.SHL(getApplicationContext());</a></p>
+      <br>
+      <p class="biru">invoke-static {p0}, Lorg/chall_reverse_android/LoadMe;->getKey(Landroid/content/Context;)V <a style="color:red;">//LoadMe.getKey(getApplicationContext());</a></p>
+      <p>fiuh, capek :) okey, sudah kita inject apk Asuna. selanjutnya kita build dan install apknya.</p>
+      <p>berikut tampilan setelah di inject denga class kita :)</p>
+      <p class="tengah"><img src="shl/asuna/img/alertflag.png" align="middle"></img></p>
+      <p>oh iya, di Injector tadi juga menggenerate flag di Log android loh :)</p>
+      <p>mari kita lihat dengan aplikasi Logcat Extreme dengan keyword "SHLFlag" atau "SHLFlag2" sama dengan yang kita tentukan di Source injector tadi.</p>
+      <p class="tengah"><img src="shl/asuna/img/logflag.png" align="middle"></img></p>
+      <p>yeeyy, kita dapat juga flagnya di Log :)</p>
+      <br></br>
+      <p>masih semangat mas/mbak? :)</p>
+      <p>okey, daripada kelamaan kita pelajari satu cara lagi.</p>
+      <p>seperti yang kita tau, dengan perkembangan mobilitas masyarakat sekarang yang cukup pesat. terkadang kita banyak menemukan suatu aplikasi yang mempunyai proteksi(keamanan) yang sangat luarbiasa kuat.</p>
+      <p>beberapa contoh proteksi tersebut adalah <a style="color:red">anti decompile, anti tampering, anti edit, source obfuscation.</a> intinya beberapa proteksi tersebut agar dapat menghambat atau mempersulit reverser. </p>
+      <p>nah, jika tadi kita menggunakan teknik mengInject app Asuna. maka kita coba balik tekniknya dangan kata lain, kita membuat aplikasi yang akan di inject dengan class dari aplikasi Asuna. yang akan meload classnya secara otomatis.</p>
+      <p>okey, langsung saja berikut source dari sebuah app yang akan kita gunakan untuk meload class dari app Asuna.</p>
+      <iframe class="tengah" style="height:800px;width:95%;" src="shl/asuna/ClassLoader/java/MainActivity.java"></iframe>
+      <p>okey, bisa kita lihat alur kerja dari aplikasi yang kita buat ini. jadi, aplikasi kita ini akan mengambil source yang kita butuhkan dari apk Asuna yang kita taruh di internal Storage dengan bantuan <a style="color:red;">DexClassLoader</a>. setelah itu class tersebut akan dijalankan di aplikasi kita ini dengan tujuan seperti misi kita pada challenge ini yaitu menggenerate flag dari return String class tersebut.</p>
+      <p>kita anggap saja app Asuna mempunyai proteksi anti Inject atau anti Edit.</p>
+      <p>langsung saja kita lihat hasilnya setelah selesai membuild dan menginstall aplikaisi tadi.</p>
+      <p class="tengah"><img src="shl/asuna/img/loader.png" align="middle"></img></p>
+      <p>yeey, kita juga bisa dapat flagnya dari aplikasi yang kita buat tadi :)</p>
+      <br></br>
+      <p>okey gan/sis/om/tante :) sepertinya sampai disini dulu kita belajar bersamanya.</p>
+      <p>mohon maaf jika yang sedikit saya sampaikan bersama ini banyak salah dalam kata atau pengetahuan saya.</p>
+      <br></br>
+      <p>akhir kata dari saya</p>
+      <h3>Wassalamualaikum wr wb</h3>
+      <br></br>
+      <br></br>
+      <p>Referensi</p>
+      <ul>
+        <li>Android Developers : <a href="https://developer.android.com/reference/dalvik/system/DexClassLoader"> DexClassLoader</a></li>
+        <li>Stackoverflow : <a href="https://stackoverflow.com/questions/2903260/android-using-dexclassloader-to-load-apk-file"> Android- Using DexClassLoader to load apk file</a></li>
+        <li>Author(Gabor Paller) : <a href="http://pallergabor.uw.hu/androidblog/dalvik_opcodes.html"> Dalvik opcodes</a></li>
+        <li>Author(lohan+) : <a href="http://androidcracking.blogspot.com/2010/09/examplesmali.html?m=1"> Android cracking(example.smali)</a></li>
+      </ul>
+      
+    </div>
+</body>
+</html>
