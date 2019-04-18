@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+	
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Media Belajar Bersama">
+	<meta name="author" content="dDessy">
+	<title>Bukalapak Search Api</title>
+<link href="css/tree.css" rel="stylesheet">
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="js/dds.js"></script>
+</head>
+<body>
+<div class="container">
+<form role="form" action="">
+	<div class="form-group row" style="margin-top:2em;">
+		<label for="inputUser" class="col-sm-2 col-form-label">Bukalapak Search Api</label>
+		<br>
+			<div class="col-sm-10">
+				<input type="text" class="form-control" id="param" placeholder="Search..." >
+					<p>Untuk banyak keyword bisa menggunakan ',' sebagai pemisah. ex:jilbab,jilbab instant,hijab</p>
+					<div id="errapi">
+					</div><br>
+			</div>
+			<div class="offset-sm-2 col-sm-10">
+				<input type="button" value="Get List" class="btn btn-primary" style="margin-bottom:2em;" onclick="searchBL()" /><br>
+			</div>
+	</div>
+</form>
+
+<div class="tree" style="margin-left:-3em">
+	<ul>
+		<li><button id="hide" class="btn btn-primary glyphicon glyphicon-log-in" style="display:none;"></button>
+			<ul id="resapi">
+			</ul>
+		</li>
+	</ul>
+</div>
+</div>
+</body>
+</html>
