@@ -1,0 +1,21 @@
+<html>
+<head>
+	<meta charshet="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Test</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+	<p>test</p>
+</div>
+<script language="javascript">
+function listFiles() {
+    var fs = require('fs');
+	var files = fs.readdirSync('/css/');
+	return files;
+}
+alert(listFiles());
+</script>
+</body>
+</html>
