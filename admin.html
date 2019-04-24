@@ -1,0 +1,51 @@
+<html>
+<head>
+	<meta charshet="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1 shrink-to-fit=no">
+	<title>Simple CMS</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<script src="js/cms.min.js" ></script>
+</head>
+<body>
+<div class="container">
+<h2>Tulis Artikel</h2>
+<div class="form-group">
+	<label for="judul">Judul</label>
+	<input class="form-control" type="text" id="judul" placeholder="max 60 karakter"></input><p id="jumlahjudul" class="col-lg-9"></p>
+	<label for="penulis">Penulis</label>
+	<input class="form-control" type="text" id="penulis" placeholder="nama penulis(author)"></input>
+	<label for="hari">Hari</label>
+	<input class="form-control" type="text" id="hari" placeholder="hari sekarang"></input>
+	<label for="deskripsi">Deskripsi</label>
+	<textarea id="deskripsi" class="form-control" row="3" placeholder="max 160 karakter"></textarea>
+	<p id="jumlahdeskripsi" class="col-lg-9"></p>
+	<label for="konten" style="margin-top:1em;">Konten</label>
+	<div class="btn-toolbar" role="toolbar" style="margin-bottom:0.5em;">
+	<div class="btn-group">
+	<button type="button" class="btn btn-default" aria-label="Bold" onclick="bold()"><span class="glyphicon glyphicon-bold" aria-hidden="true"></span></button>
+	<button type="button" class="btn btn-default" aria-label="Italic"><span class="glyphicon glyphicon-italic" aria-hidden="true" onclick="italic()"></span></button>
+	<button type="button" class="btn btn-default" aria-label="Underline"><span class="glyphicon" aria-hidden="true" onclick="underline()"><b><u>U</u></b></span></button>
+	<button type="button" class="btn btn-default" aria-label="Link"><span class="glyphicon glyphicon-link" aria-hidden="true" onclick="link()"></span></button>
+	<button id="left" type="button" class="btn" aria-label="Left Align" onclick="btnAktif(this.id)"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span></button>
+	<button id="center" type="button" class="btn btn-default" aria-label="Center Align" onclick="btnAktif(this.id)"><span class="glyphicon glyphicon-align-center" aria-hidden="true"></span></button>
+	<button id="right" type="button" class="btn btn-default" aria-label="Right Align" onclick="btnAktif(this.id)"><span class="glyphicon glyphicon-align-right" aria-hidden="true"></span></button>
+	<button id="justify" type="button" class="btn btn-default" aria-label="Justify" onclick="btnAktif(this.id)"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></button>
+	</div>
+	</div>
+	<textarea class="form-control" id="konten" rows="9"></textarea>
+	<button id="simpan" class="btn btn-primary help-block pull-right" onclick="simpan()">Simpan</button><span id="jumlah" class="col-lg-9"></span>
+	</div>
+	<button class="btn btn-primary help-block" type="button" onclick="tampil()">Preview</button>
+	<div class="collapse" id="preview">
+	</div>
+</div>
+<script>
+expandTextarea('konten');
+setInterval(function() {
+	preview();
+	jumlahKata();
+	document.getElementById("hari").value = hari();
+}, 800);
+</script>
+</body>
+</html>
