@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charshet="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shring-to-fit=no" >
+<meta name="author" content="dDessy" >
+<meta name="description" content="Jd.id, Shopee, Bukalapak. Flash Sale Product scrapper based api back-end." >
+<title>Shofia v1.3</title>
+<style>
+.lds-ring {
+  display: inline-block;
+  position: relative;
+  width: 64px;
+  height: 64px;
+}
+.lds-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 51px;
+  height: 51px;
+  margin: 6px;
+  border: 6px solid #fdd;
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: #fdd transparent transparent transparent;
+}
+.lds-ring div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+</style>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<script src="js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+function mancing(id) {
+	return document.getElementById(id);
+}
+</script>
+</head>
+<body>
+<h1 class="text-center">Media Belajar v1.4</h1>
+<div id="login" class="container">
+    <form id="log" action="javascript:login()">
+        <h2 class="text-center">Log in</h2>       
+        <div class="form-group">
+            <input id="pass" type="password" class="form-control" placeholder="Password" required="required">
+            <p id="err" style="color:red;"></p>
+        </div>
+        <div class="form-group">
+            <button onclick="login()" class="btn btn-primary btn-block" style="width:20%;">Log in</button>
+        </div>
+        <div class="clearfix">
+            <label class="pull-left checkbox-inline"><input id="remember" type="checkbox"> Ingatkan Saya</label>
+            <a href="javascript:alert('kok lupa? :v')" class="pull-right">Lupa Password?</a>
+        </div>
+</div>
+<div id="main" class="container" style="display:none;">
+<div style="text-align:center;margin-top:0.5em;">
+</div>
+<label style="color:red;">Peringatan!!! Halaman ini hanya bertujuan sebagai media belajar bersama. segala tindakan yang merugikan pihak manapun, diluar tanggung jawab kami.<br>Gunakan dengan bijak! Terimakasih.</label>
+<div class="nav" style="margin:1em;text-align:center;">
+	<a class="btn btn-default" href="https://ddessy28.github.io/public/shofia_v2.html"><span class="glyphicon glyphicon-home"></span></a>
+	<button class="btn btn-default" onclick="mulai('jdid')">JD.id</button>
+	<button class="btn btn-default" onclick="mulai('bklp')">Bukalapak</button>
+	<button class="btn btn-default" onclick="mulai('shofi')">Shopee</button>
+</div>
+<div id="selanjutnya" class="panel panel-default panel-heading" style="display:none;">
+</div>
+<div id="utama" class="panel panel-default" style="margin-top:2em;display:none;" >
+<div class="panel-heading"><p id="mulai"></p><p id="akhir"></p><p id="total"></p>
+	<div id="urutan" class="form-check" >
+	<input type="checkbox" class="form-check-input" id="termurah">
+	<label class="form-check-label" for="termurah">Termurah</label>
+	<span style="margin:1em;"><input type="checkbox" class="form-check-input" id="termahal" >
+	<label class="form-check-label" for="termahal">Termahal</label></span>
+	<span id="tampil" ><input type="checkbox" class="form-check-input" id="diskon" >
+	<label class="form-check-label" for="diskon">Diskon Up!</label></span>
+	</div>
+	<input type="checkbox" class="form-check-input" id="stok" >
+	<label class="form-check-label" for="stok">Sembunyikan Produk Stok Habis</label>
+</div>
+<div id="hmm" class="panel-body" style="text-align:center;"></div>
+</div>
+</div>
+<div id="muter" style="text-align:center;display:none;" ><div class="lds-ring" ><div></div><div></div><div></div><div></div></div><p id="sabar" >Mohon Bersabar...</p></div>
+<script>
+//stackoverflow.com/a/8509244
+$(document).ready(function() {
+
+        var remember = $.cookie('remember');
+        if (remember == 'true') 
+        {
+            var password = $.cookie('password');
+            // autofill the fields
+            $('#pass').val(password);
+        }
+    $("#log").submit(function() {
+        if ($('#remember').is(':checked')) {
+            var password = $('#pass').val();
+
+            // set cookies to expire in 14 days
+            $.cookie('password', password, { expires: 14 });
+            $.cookie('remember', true, { expires: 14 });                
+        }
+        else
+        {
+            // reset cookies
+            $.cookie('password', null);
+            $.cookie('remember', null);
+        }
+  });
+});
+function login() {
+	mancing("muter").style.display = "block";
+	var fia = document.createElement('SCRIPT');
+	fia.src = "https://ddessy.000webhostapp.com/shofia.php?password=" + mancing("pass").value;
+	document.getElementsByTagName('HEAD')[0].appendChild(fia);
+}
+$('input[id=stok]').change(function(){
+    if($(this).is(':checked')) {
+        showHide(true);
+    }
+	else {
+    	showHide(false);
+    }
+});
+$('input[id=termurah]').change(function(){
+    if($(this).is(':checked')) {
+        murah();
+        cekUrutan("termurah");
+    }
+});
+$('input[id=termahal]').change(function(){
+    if($(this).is(':checked')) {
+        mahal();
+        cekUrutan("termahal");
+    }
+});
+$('input[id=diskon]').change(function(){
+    if($(this).is(':checked')) {
+        diskon();
+        cekUrutan("diskon");
+    }
+});
+</script>
+</body>
+</html>
