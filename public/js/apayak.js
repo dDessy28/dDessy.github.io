@@ -68,7 +68,7 @@ function callOtherDomain(param, idProduk, id) {
 					if (request.status == 200) {
 						outputResult(request, param, idProduk);
 					} else {
-						alert("request Errors Occured");
+						mancing("resapi").innerHTML = '<p style="color:red;">[?]beberapa request tidak merespon</p>';
 					}
 				}
 			}
