@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charshet="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="author" content="dDessy">
+<meta name="description" content="arm to hex converter">
+<title>Arm to Hex Converter</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<style>
+.loader,
+.loader:before,
+.loader:after {
+  background: #000000;
+  -webkit-animation: load1 1s infinite ease-in-out;
+  animation: load1 1s infinite ease-in-out;
+  width: 1em;
+  height: 4em;
+}
+.loader {
+  color: #000000;
+  text-indent: -9999em;
+  margin: 88px auto;
+  position: relative;
+  font-size: 11px;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+.loader:before,
+.loader:after {
+  position: absolute;
+  top: 0;
+  content: '';
+}
+.loader:before {
+  left: -1.5em;
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+.loader:after {
+  left: 1.5em;
+}
+@-webkit-keyframes load1 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 0;
+    height: 4em;
+  }
+  40% {
+    box-shadow: 0 -2em;
+    height: 5em;
+  }
+}
+@keyframes load1 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 0;
+    height: 4em;
+  }
+  40% {
+    box-shadow: 0 -2em;
+    height: 5em;
+  }
+}
+</style>
+<script src="js/bootstrap.min.js"></script>
+<script type="text/javascript">
+function hook(id) {
+	return document.getElementById(id);
+}
+function getArm() {
+	try {
+		init();
+		var asli = hook("arm").value;
+		var kode = encodeURIComponent(asli);
+		coba(kode);
+	} catch (error) {
+		err(error);
+	}
+}
+function coba(param) {
+	var request;
+	var isIE8 = window.XDomainRequest ? true : false;
+	if (isIE8) {
+		request = new window.XDomainRequest();
+	} else {
+		request = new XMLHttpRequest();
+	}
+	if (request) {
+		var url = "https://ddessy.000webhostapp.com/arm2hex.php?arm=" + param;
+		if(isIE8) {
+			request.onload = hasil(request);
+			request.open("GET", url, true);
+			request.send();
+		} else {
+			request.open('GET', url, true);
+			request.onreadystatechange = function() {
+				if (request.readyState == 4) {
+					if (request.status == 200) {
+						hasil(request);
+					} else {
+						err("request Errors Occured");
+					}
+				}
+			}
+			request.send();
+		}
+	} else {
+	  err("No request TookPlace At All");
+	}
+}
+function hasil(req) {
+	var area = ["armgdb","armhex","thumbgdb","thumbhex","thumbv8gdb","thumbv8hex","arm64gdb","arm64hex"];
+	var asli = hook("arm").value;
+	var res = req.responseText;
+	var arr = JSON.parse(res);
+	var i = 0;
+	var j = 0;
+	arr.forEach( function (bagi, num) {
+		if (asli.includes("\n")) {
+			var len = asli.split("\n").length - 1;
+			if (j == len) {
+				hook(area[i]).value += bagi + "\n";
+				j = 0;
+				i++;
+			} else {
+				hook(area[i]).value += bagi + "\n";
+				j++;
+			}
+		} else {
+			hook(area[num]).value = bagi;
+		}
+	});
+	hook("loading").style.display = "none";
+	hook("res").style.display = "block";
+}
+function init() {
+	var sebelum = ["armgdb","armhex","thumbgdb","thumbhex","thumbv8gdb","thumbv8hex","arm64gdb","arm64hex"];
+	sebelum.forEach( hilang => {
+		hook(hilang).value = "";
+	});
+	hook("res").style.display = "none";
+	hook("loading").style.display = "block";
+}
+function err(msg) {
+	hook("loading").style.display = "none";
+	var text = " [!] " + msg;
+	var textNode = document.createTextNode(text);
+	var textDiv = hook("errapi");
+	textDiv.appendChild(textNode);
+}
+</script>
+</head>
+<body>
+<div class="container">
+<div class="clear-fix text-center">
+<h1><b>Arm 2 Hex Converter</b></h1>
+<hr>
+<h4>Arm(x32/x64-ARM32 & ARM64)</h4>
+<textarea id="arm" class="form-control center" style="width:80%;" rows="8" placeholder="tulis arm disini
+ex : mov r0,#1
+*gunakan new line(\n)[Enter] untuk kode selanjutnya
+ex : 
+mov r0,#1
+movt r0,#0x1234
+movs r0,#0x1234
+"></textarea>
+<br>
+<div id="errapi">
+</div>
+<button class="btn btn-primary" onclick=getArm()>Convert</button>
+<div id="loading" class="loader" style="display:none;"></div>
+<div id="res" style="display:none;">
+<hr>
+<h2>Result</h2>
+<label for="armgdb" class="pull-left">ARM GDB/LLDB</label>
+<textarea id="armgdb" class="form-control" rows="2"></textarea>
+<br>
+<label for="armhex" class="pull-left">ARM HEX</label>
+<textarea id="armhex" class="form-control" rows="2"></textarea>
+<br>
+<label for="thumbgdb" class="pull-left">THUMB GDB/LLDB</label>
+<textarea id="thumbgdb" class="form-control" rows="2"></textarea>
+<br>
+<label for="thumbhex" class="pull-left">THUMB HEX</label>
+<textarea id="thumbhex" class="form-control" rows="2"></textarea>
+<br>
+<label for="thumbv8gdb" class="pull-left">THUMBv8 GDB/LLDB</label>
+<textarea id="thumbv8gdb" class="form-control" rows="2"></textarea>
+<br>
+<label for="thumbv8hex" class="pull-left">THUMBv8 HEX</label>
+<textarea id="thumbv8hex" class="form-control" rows="2"></textarea>
+<br>
+<label for="arm64gdb" class="pull-left">ARM64 GDB/LLDB</label>
+<textarea id="arm64gdb" class="form-control" rows="2"></textarea>
+<br>
+<label for="arm64hex" class="pull-left">ARM64 HEX</label>
+<textarea id="arm64hex" class="form-control" rows="2"></textarea>
+<br>
+<hr>
+</div>
+</div>
+</div>
+</body>
+</html>
